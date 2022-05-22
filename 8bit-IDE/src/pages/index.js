@@ -2,65 +2,36 @@ import * as React from "react"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
 import { Table, TableItem, TableHeader, TableRow, TableBody } from '../components/Table';
+import { DisplayMemory, updateDisplay } from '../components/Display';
 
 let memory = new Int8Array(256).fill(0);
+
+function _storage(key) {
+  return Uint8Array.from(sessionStorage.getItem(key).split(','));
+}
 
 const IndexPage = () => (
   <Layout>
     <Seo title="Home" />
-    <Table id="memory-view">
-      <TableBody>
-        <TableRow id="TR-0">
-          <TableItem>Test</TableItem>
-        </TableRow>
-        <TableRow id="TR-1">
-          <TableItem>Test</TableItem>
-        </TableRow>
-        <TableRow id="TR-2">
-          <TableItem>Test</TableItem>
-        </TableRow>
-        <TableRow id="TR-3">
-          <TableItem>Test</TableItem>
-          </TableRow>
-        <TableRow id="TR-4">
-          <TableItem>Test</TableItem>
-        </TableRow>
-        <TableRow id="TR-5">
-          <TableItem>Test</TableItem>
-        </TableRow>
-        <TableRow id="TR-6">
-          <TableItem>Test</TableItem>
-        </TableRow>
-        <TableRow id="TR-7">
-          <TableItem>Test</TableItem>
-        </TableRow>
-        <TableRow id="TR-8">
-          <TableItem>Test</TableItem>
-        </TableRow>
-        <TableRow id="TR-9">
-          <TableItem>Test</TableItem>
-        </TableRow>
-        <TableRow id="TR-A">
-          <TableItem>Test</TableItem>
-        </TableRow>
-        <TableRow id="TR-B">
-          <TableItem>Test</TableItem>
-        </TableRow>
-        <TableRow id="TR-C">
-          <TableItem>Test</TableItem>
-        </TableRow>
-        <TableRow id="TR-D">
-          <TableItem>Test</TableItem>
-        </TableRow>
-        <TableRow id="TR-E">
-          <TableItem>Test</TableItem>
-        </TableRow>
-        <TableRow id="TR-F">
-          <TableItem>Test</TableItem>
-        </TableRow>
-      </TableBody>
-    </Table>
+    {
+      sessionStorage.setItem('Memory', new Uint8Array(256).fill(0))
+    }
+    {DisplayMemory(_storage('Memory'))}
+    {
+      // if this thing is called I wonder if I can do code injection to get an update function
+      window.setInterval(function() {
+        let temp = _storage('Memory');
+        updateDisplay(temp, document);
+
+        // real update function goes here
+
+        // proof of concept (remove this later)
+        temp[Math.round(Math.random() * 255)] = Math.round(Math.random() * 255);
+        sessionStorage.setItem('Memory', temp);
+      }, 1)
+    }
   </Layout>
 )
+
 
 export default IndexPage

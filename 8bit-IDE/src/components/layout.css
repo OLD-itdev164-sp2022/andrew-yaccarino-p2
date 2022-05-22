@@ -222,3 +222,18 @@ pre tt:before,
 pre tt:after {
   content: none;
 }
+
+
+td {
+  margin: 0px;
+  padding: 0px;
+  text-align: center;
+  height: 20pt;
+  width: 20pt;
+  border-color: black;
+  border-style: solid;
+  border-width: 1px;
+}
+table {
+  border-collapse: collapse;
+}
