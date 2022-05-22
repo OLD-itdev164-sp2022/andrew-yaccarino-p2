@@ -1,8 +1,5 @@
-import { Table, TableItem, TableHeader, TableRow } from '../lib/HTML/Table';
-
-import { memory } from '../lib/CPU';
-
-let iterator = 0;
+import React from 'react';
+import { Table, TableItem, TableHeader, TableRow } from '../../8bit-IDE/src/components/Table';
 
 const IndexPage = ({ data }) => (
     <div>
