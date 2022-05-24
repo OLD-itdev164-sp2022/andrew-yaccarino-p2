@@ -1,6 +1,5 @@
 import { _parse } from './parser';
 import { register_locations } from '../constants';
-import { get_storage, get_storage_other, set_storage } from './managememory';
 import { execCodeAt } from './exec';
 import { highlight } from '../components/Display';
 import { updateDisplay } from '../components/Display';
@@ -14,8 +13,7 @@ function fillExtraSpace(values) {
 }
 
 export const preload = function() {
-    set_storage('ide-run',false);
-    set_storage('Memory', new Uint8Array(256).fill(0));
+    window.global_Memory = new Uint8Array(256).fill(0);
 }
 
 export const setup = function(window) {
@@ -32,10 +30,9 @@ export const setup = function(window) {
     mem[mem.length - register_locations.OC] = mem.length - 16;
 
     window.global_mapping = code.mapping;
-    set_storage('Memory', mem);
-    set_storage('ide-run', true);
+    window.global_Memory = mem;
     window.global_intervalID = window.setInterval(function() {
-        let temp = get_storage('Memory');
+        let temp = window.global_Memory;
         updateDisplay(temp, document);
 
         // real update function goes here
@@ -44,7 +41,7 @@ export const setup = function(window) {
 }
 
 export const runtime = function(window) {
-    let code = get_storage('Memory');
+    let code = window.global_Memory;
 
     // get program counter
     let pc = code[code.length - register_locations.PC];
@@ -60,12 +57,9 @@ export const runtime = function(window) {
 
     highlight(window.document, pc, 'hl_pc');
 
-    set_storage('Memory', reply);
+    window.global_Memory = reply;
 }
 
 export const stop = function(window) {
-    set_storage('ide-run', false);
     window.clearInterval(window.global_intervalID);
 }
-
-export * from './managememory';
