@@ -1,9 +1,9 @@
 import * as React from "react"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
-import { Table, TableItem, TableHeader, TableRow, TableBody } from '../components/Table';
-import { DisplayMemory, updateDisplay } from '../components/Display';
-import { preload, setup, stop, runtime, get_storage, get_storage_other, set_storage } from '../runtime';
+import { Table, TableItem, TableRow, TableBody } from '../components/Table';
+import { DisplayMemory } from '../components/Display';
+import { preload, setup, stop } from '../runtime';
 
 const IndexPage = () => (
   <Layout>
@@ -36,15 +36,15 @@ const IndexPage = () => (
       </TableBody>
     </Table>
     {preload()}
-    {DisplayMemory(get_storage('Memory'))}
+    {DisplayMemory(window.global_Memory)}
     {
       window.setTimeout(function() {
         window.global_setup = setup;
         window.global_stop = stop;
-        document.getElementById('ide-textarea').defaultValue ='JP print\n; hello world test\ndata:\nDB \"Hello World!\"\n\nprint:\nLD B, data\nLD C, 12\n\n.loop:\nLD [B], A\nOUT\nINC B\nDEC C\nJZ end\nJP .loop\n\nend:\nHALT';
+        document.getElementById('ide-textarea').value ='JP print\n; hello world test\ndata:\nDB \"Hello World!\"\n\nprint:\nLD B, data\nLD C, 12\n\n.loop:\nLD [B], A\nOUT\nINC B\nDEC C\nJZ end\nJP .loop\n\nend:\nHALT';
         document.getElementById('run-button').setAttribute('onclick', 'window.global_setup(window)');
         document.getElementById('stop-button').setAttribute('onclick', 'window.global_stop(window)');
-      }, 1)
+      }, 10)
     }
   </Layout>
 )

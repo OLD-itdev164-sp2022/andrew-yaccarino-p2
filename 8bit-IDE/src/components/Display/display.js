@@ -1,4 +1,4 @@
-import { Table, TableRow, TableHeader, TableBody, TableItem } from '../Table';
+import { Table, TableRow, TableBody, TableItem } from '../Table';
 import React from 'react';
 
 function _generate_row(arr, id) {
