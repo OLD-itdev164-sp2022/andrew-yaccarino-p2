@@ -251,8 +251,10 @@ const opcodes = {
     SWAP_A:         0xF9,
     SWAP_B:         0xFA,
     SWAP_C:         0xFB,
-    SWAP_D:         0xFC
-    // can add 3 more later
+    SWAP_D:         0xFC,
+    OUT:            0xFD,
+    DEL:            0xFE
+    // can add 1 more later
 };
 
 export { opcodes };
