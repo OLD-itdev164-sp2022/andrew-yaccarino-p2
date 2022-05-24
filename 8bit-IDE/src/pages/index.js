@@ -35,7 +35,7 @@ const IndexPage = () => (
         </TableRow>
       </TableBody>
     </Table>
-    {preload()}
+    {preload(window)}
     {DisplayMemory(window.global_Memory)}
     {
       window.setTimeout(function() {
@@ -44,7 +44,7 @@ const IndexPage = () => (
         document.getElementById('ide-textarea').value ='JP print\n; hello world test\ndata:\nDB \"Hello World!\"\n\nprint:\nLD B, data\nLD C, 12\n\n.loop:\nLD [B], A\nOUT\nINC B\nDEC C\nJZ end\nJP .loop\n\nend:\nHALT';
         document.getElementById('run-button').setAttribute('onclick', 'window.global_setup(window)');
         document.getElementById('stop-button').setAttribute('onclick', 'window.global_stop(window)');
-      }, 10)
+      }, 1)
     }
   </Layout>
 )

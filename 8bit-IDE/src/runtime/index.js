@@ -12,7 +12,7 @@ function fillExtraSpace(values) {
     return output;
 }
 
-export const preload = function() {
+export const preload = function(window) {
     window.global_Memory = new Uint8Array(256).fill(0);
 }
 
@@ -22,7 +22,7 @@ export const setup = function(window) {
     for (let i = 0; i < 256; i++) { highlight(window.document, i, 'css-vurnku'); }
     if (window.global_intervalID) window.clearInterval(window.global_intervalID);
 
-    preload(); // reset
+    preload(window); // reset
 
     let code = _parse(code_to_run);
     let mem = fillExtraSpace(code.code);
