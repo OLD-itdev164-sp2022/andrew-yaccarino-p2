@@ -3,6 +3,7 @@ import { register_locations } from '../constants';
 import { get_storage, get_storage_other, set_storage } from './managememory';
 import { execCodeAt } from './exec';
 import { highlight } from '../components/Display';
+import { updateDisplay } from '../components/Display';
 
 function fillExtraSpace(values) {
     let output = new Uint8Array(256).fill(0);
@@ -17,8 +18,11 @@ export const preload = function() {
     set_storage('Memory', new Uint8Array(256).fill(0));
 }
 
-export const setup = function(document) {
-    let code_to_run = document.getElementById('ide-textarea').innerHTML;
+export const setup = function(window) {
+    let code_to_run = window.document.getElementById('ide-textarea').value;
+
+    for (let i = 0; i < 256; i++) { highlight(window.document, i, 'css-vurnku'); }
+    if (window.global_intervalID) window.clearInterval(window.global_intervalID);
 
     preload(); // reset
 
@@ -30,31 +34,38 @@ export const setup = function(document) {
     window.global_mapping = code.mapping;
     set_storage('Memory', mem);
     set_storage('ide-run', true);
+    window.global_intervalID = window.setInterval(function() {
+        let temp = get_storage('Memory');
+        updateDisplay(temp, document);
+
+        // real update function goes here
+        runtime(window);
+      }, 100);
 }
 
-export const runtime = function(document) {
+export const runtime = function(window) {
     let code = get_storage('Memory');
 
     // get program counter
     let pc = code[code.length - register_locations.PC];
 
-    highlight(document, pc, 'css-vurnku');
+    highlight(window.document, pc, 'css-vurnku');
 
-    for (let x in window.global_mapping) { highlight(document, parseInt(x), 'hl_instr'); }
+    for (let x in window.global_mapping) { highlight(window.document, parseInt(x), 'hl_instr'); }
 
-    let reply = execCodeAt(code);
+    let reply = execCodeAt(code, window);
 
     // get program counter
-    pc = reply.code[reply.code.length - register_locations.PC];
+    pc = reply[reply.length - register_locations.PC];
 
-    highlight(document, pc, 'hl_pc');
+    highlight(window.document, pc, 'hl_pc');
 
-    set_storage('Memory', reply.code);
-    set_storage('ide-run', reply.continue);
+    set_storage('Memory', reply);
 }
 
-export const stop = function() {
+export const stop = function(window) {
     set_storage('ide-run', false);
+    window.clearInterval(window.global_intervalID);
 }
 
 export * from './managememory';
