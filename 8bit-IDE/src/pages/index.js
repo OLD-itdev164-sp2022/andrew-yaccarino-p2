@@ -38,24 +38,12 @@ const IndexPage = () => (
     {preload()}
     {DisplayMemory(get_storage('Memory'))}
     {
-      // if this thing is called I wonder if I can do code injection to get an update function
-      window.setInterval(function() {
-        let temp = get_storage('Memory');
-        updateDisplay(temp, document);
-
-        // real update function goes here
-        if (get_storage_other('ide-run') === 'true') {
-          runtime(document);
-        }
-      }, 100)
-    }
-    {
       window.setTimeout(function() {
         window.global_setup = setup;
         window.global_stop = stop;
         document.getElementById('ide-textarea').defaultValue ='JP print\n; hello world test\ndata:\nDB \"Hello World!\"\n\nprint:\nLD B, data\nLD C, 12\n\n.loop:\nLD [B], A\nOUT\nINC B\nDEC C\nJZ end\nJP .loop\n\nend:\nHALT';
-        document.getElementById('run-button').setAttribute('onclick', 'window.global_setup(document)');
-        document.getElementById('stop-button').setAttribute('onclick', 'window.global_stop()');
+        document.getElementById('run-button').setAttribute('onclick', 'window.global_setup(window)');
+        document.getElementById('stop-button').setAttribute('onclick', 'window.global_stop(window)');
       }, 1)
     }
   </Layout>

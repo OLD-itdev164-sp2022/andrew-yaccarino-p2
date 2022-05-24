@@ -4,7 +4,7 @@ function isBitSet(value,flag) {
     return (value & flag) === flag;
 }
 
-export const execCodeAt = function(code) {
+export const execCodeAt = function(code, window) {
     let A = code.length - register_locations.A;
     let B = code.length - register_locations.B;
     let C = code.length - register_locations.C;
@@ -21,7 +21,8 @@ export const execCodeAt = function(code) {
     switch(value) {
         case opcodes.NOP: break;
         case opcodes.HALT:
-            return {code: code, continue: false}; // stop running
+            window.clearInterval(window.global_intervalID);; // stop running
+            return code;
         case opcodes.LD_A_ADDRESS:
             v1 = code[++index];
             v2 = A;
@@ -1808,5 +1809,5 @@ export const execCodeAt = function(code) {
 
     code[PC] = ++index;
 
-    return {code: code, continue: true};
+    return code;
 }

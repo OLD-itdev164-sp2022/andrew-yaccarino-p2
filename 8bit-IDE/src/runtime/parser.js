@@ -50,7 +50,7 @@ function isRegOrNum(input, typeReg, typeNumber) {
         return {type: typeReg, hiddenType: 'conditional', value: input};
     } else if (input === 'A' || input === 'B' || input === 'D') {
         return {type: typeReg, value: input};
-    } else if (input === 'Z') {
+    } else if (input === 'Z' || input === 'NZ' || input === 'NC') {
         return {hiddenType: 'conditional', value: input};   
     }else {
         var label = regexLabel.exec(input)?input:undefined;
@@ -166,7 +166,7 @@ function _parse(codetxt) {
                             if (p1.type === 'number') {
                                 isVoid('CALL', parsed_line[op2_group]);
                                 code.push(opcodes.CALL_ADDRESS,p1.value);
-                            } else if (p1.type === 'conditional') {
+                            } else if (p1.hiddenType === 'conditional') {
                                 p2 = getValue(parsed_line[op2_group]);
                                 if (p2.type === 'number') {
                                     if (p1.value === 'C') {
@@ -182,7 +182,7 @@ function _parse(codetxt) {
                                 p1 = getValue(parsed_line[op1_group]);
                                 isVoid('RET', parsed_line[op2_group]);
                                 
-                                if (p1.type === 'conditional')
+                                if (p1.hiddenType === 'conditional')
                                     code.push(opcodes[`RET_${p1.value}`]);
                                 else throw createError('RET');
                             } else {
