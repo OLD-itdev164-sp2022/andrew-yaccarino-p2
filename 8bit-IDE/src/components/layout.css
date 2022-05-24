@@ -236,4 +236,18 @@ td {
 }
 table {
   border-collapse: collapse;
+  /*display: inline-block;*/
+  float: right;
+}
+
+.hl_instr {
+  background-color: aquamarine;
+}
+.hl_pc {
+  background-color: goldenrod;
+}
+
+textarea {
+  float: left;
+  width: 372px;
 }
